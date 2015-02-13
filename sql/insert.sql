@@ -1,6 +1,4 @@
-﻿
-;
-DROP TABLE IF EXISTS `article`;
+﻿DROP TABLE IF EXISTS `article`;
 CREATE TABLE IF NOT EXISTS `article` (
   `key_article` bigint(20) NOT NULL auto_increment,
   `id_section` bigint(20) NOT NULL default '0',

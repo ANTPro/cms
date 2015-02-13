@@ -1,6 +1,4 @@
-﻿
-;
-DROP TABLE IF EXISTS `themes`;
+﻿DROP TABLE IF EXISTS `themes`;
 CREATE TABLE IF NOT EXISTS `themes` (
   `key_themes` bigint(10) NOT NULL auto_increment,
   `title` varchar(50) NOT NULL default '',

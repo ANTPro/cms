@@ -5,6 +5,8 @@ $pages['setup']=array
 	'menu'=>array(
 		'title'=>'Установка'
 	),
+	'notmenu'=>'',
+	'notmainmenu'=>'',
 	'templates'=>array
 	(
 		'form1'=>'setupform1.tpl',
@@ -47,9 +49,10 @@ function execsql($sqlfilename)
 	{
 		$fsql=fopen($file,"r");
 		$sql=fread($fsql,filesize($file));
-	    fclose($fsql);
+		fclose($fsql);
 
 		$query_arr = split_sql($sql);
+
 		foreach($query_arr as $query)
 		{
 			$result=$db->query($query,FALSE);
@@ -113,6 +116,8 @@ function pagesetup()
 				include('./config.php');
 				$db=new TDataBase();
 				$db->createdb();
+				$db=new TDataBase();
+				$db->selectdb();
 				execsql('struct');
 
 				$fields['key_users']='NULL';

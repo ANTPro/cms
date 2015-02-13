@@ -66,7 +66,8 @@ function commentscount($page,$id)
 	}
 }
 function processproperty($properties,$row)
-{	global $tpl;
+{
+	global $tpl;
 
 	foreach($properties AS $propname=>$value)
 	{
@@ -134,7 +135,9 @@ function makeviewtable($sql,$fields,$tools=array())
  	safequery($sql,'',FALSE);
 	$sortfields=array();
 	foreach($fields AS $field=>$properties)
-	{		$sortfields[$field]=$properties['title'];	}
+	{
+		$sortfields[$field]=$properties['title'];
+	}
 	$sort=sortform($sortfields,$count);
     $error="Нет записей.";
  	if (safequery("$sql $sort",$error,FALSE))
@@ -198,7 +201,8 @@ function makeviewtable($sql,$fields,$tools=array())
 # $success - текст сообщения об успешном выполнении запроса.
 function checkquery($sql,$url,$error,$success)
 {
- 	global $tpl,$db,$errors,$infos; 	if($db->query($sql,FALSE))
+ 	global $tpl,$db,$errors,$infos;
+ 	if($db->query($sql,FALSE))
  	{
 		$tpl->setvars(array(
 			'META_URL'=>$url
@@ -209,7 +213,8 @@ function checkquery($sql,$url,$error,$success)
 	else
 	{
 		$errors[]=$error;
-	}}
+	}
+}
 # Запрос на удаление с проверкой ошибок.
 # $menuid - текущее меню
 # $subsec - подразделы
@@ -217,10 +222,12 @@ function makesectioncombobox($menuid,$subsec=TRUE)
 {
 	global $tpl,$db,$id;
 	if($subsec)
-	{		$sql="";
+	{
+		$sql="";
 	}
 	else
-	{		$sql="AND NOT(key_section=$id)";
+	{
+		$sql="AND NOT(key_section=$id)";
 	}
 	$result=$db->query("SELECT key_section,title FROM section WHERE (parent=0)$sql ORDER BY title");
 	for ($i=0; $i<$db->rowcount($result); $i++)
@@ -321,8 +328,10 @@ function sortform($sortfields,$count=1)
 		$curpage=postnumparam('showpage');
  	}
     else
-    {    	$curpage=1;
-    	$selected=-1;    }
+    {
+    	$curpage=1;
+    	$selected=-1;
+    }
 	$limit='';
 	$pagecount=round($count/10);
 	if ($pagecount<1) $pagecount=1;
@@ -351,7 +360,8 @@ function makecombobox($source,$select,$varsave)
  	global $tpl,$db;
 	$tpl->vardelete('OPTION');
  	if(gettype($source)=="array")
- 	{		foreach($source as $key=>$value)
+ 	{
+		foreach($source as $key=>$value)
 		{
 			$sel='';
 			if ($select==$key)
@@ -364,7 +374,8 @@ function makecombobox($source,$select,$varsave)
 				'OPTION_SEL'=>$sel
 			));
 			$tpl->varadd($varsave,'OPTION','options');
-		} 	}
+		}
+ 	}
  	else
  	{
 		$result=$db->query($source);
@@ -373,7 +384,7 @@ function makecombobox($source,$select,$varsave)
 		{
 			for ($i=0; $i<$count; $i++)
 			{
-				$row=$db->getrow($result);
+				$row=$db->getassocrow($result);
 				$sel='';
 				if ($select==$row[0])
 				{
@@ -538,7 +549,8 @@ function checkid($id,$checksql,$getsql='')
 	global $db;
 	$result=$db->query($checksql);
 	if ($db->result($result, 0)==0)
-	{		if (!$getsql=='')
+	{
+		if (!$getsql=='')
 		{
 			$result=$db->query($getsql);
 			if ($db->rowcount($result)!=0)
@@ -589,23 +601,27 @@ function setmainvars()
 	$start = utime();
 	$errors=array();
 	$infos=array();
-	//print_r($GLOBALS);	$selfpage=$GLOBALS['REQUEST_URI'];
-	$website='http://'.$GLOBALS['SERVER_NAME'].'/';
+	//print_r($GLOBALS);
+	$selfpage=$_SERVER['REQUEST_URI'];
+	$website='http://'.$_SERVER['SERVER_NAME'].'/';
 	$tpl->setvars(array(
 		//'SITE_WEBSITE'=>$vuz_title,
 		'SITE_TITLE'=>$vuz_title,
 		'COPYRIGHT'=>'© SFI',
 		'SELF'=>$selfpage,
 		'META_TIME'=>'2'
-	));}
+	));
+}
 function stats()
 {
-	global $tpl,$start;	$tpl->setvars(array(
+	global $tpl,$start;
+	$tpl->setvars(array(
 		'TPLTEMPLATESCOUNT'=>count($tpl->templates),
 		'TPLVARIABLESCOUNT'=>count($tpl->variables)
 	));
 	$runtime=utime()-$start;
-	$tpl->setvar('RUNTIME',$runtime);}
+	$tpl->setvar('RUNTIME',$runtime);
+}
 
 function poststrparam($param)
 {
@@ -685,7 +701,9 @@ function getuserinfo()
 	            break;
 	        }
 	        if (isset($row['theme']))
-	        {	        	$theme=$row['theme'];	        }
+	        {
+	        	$theme=$row['theme'];
+	        }
 	        else
 	        {
 	        	$theme='default';
@@ -693,6 +711,8 @@ function getuserinfo()
 	    }
     }
     else
-    {    	$theme='default';    }
+    {
+    	$theme='default';
+    }
 }
 ?>

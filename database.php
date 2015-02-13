@@ -11,32 +11,42 @@ class TDataBase
     # При создании экземпляра создается соединение с базой
 	function TDataBase()
 	{
-		global $vuz_dbhost,$vuz_dbusername,$vuz_dbpassword;
+		global $vuz_dbhost,$vuz_dbname,$vuz_dbusername,$vuz_dbpassword;
         $this->debug=FALSE;
-		$this->connect=@mysql_connect($vuz_dbhost,$vuz_dbusername,$vuz_dbpassword)or
-		die('Ошибка: Невозможно установить соединение с сервером баз данных. Проверьте настройки подключения');
+		try 
+		{
+		    $this->connect = new PDO("mysql:host=$vuz_dbhost;vuz_dbname=$vuz_dbname", $vuz_dbusername, $vuz_dbpassword);
+		    $this->connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT );//PDO::ERRMODE_EXCEPTION//PDO::ERRMODE_SILENT
+		}
+		catch(Exception $e)
+		{
+		    die('Ошибка: Невозможно установить соединение с сервером баз данных. Проверьте настройки подключения');
+		}
 	}
 	function createdb()
 	{
 		global $vuz_dbname;
-        $this->query("DROP DATABASE $vuz_dbname",FALSE);
-		$this->query("CREATE DATABASE $vuz_dbname DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;")or
-			$this->error('Ошибка: Невозможно создать базу данных: '.$vuz_dbname);
-		mysql_close($this->connect);
+		
+		$this->connect->query("DROP DATABASE $vuz_dbname;");
+		$this->connect->query("CREATE DATABASE $vuz_dbname DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;");
+		
 		$this->TDataBase();
 		$this->selectdb();
 	}
 	function selectdb()
 	{
 		global $vuz_dbname;
-		$this->db=mysql_select_db($vuz_dbname,$this->connect)or $this->error('Ошибка: Не возможно открыть базу данных: '.$vuz_dbname);
-		$this->query("SET NAMES 'utf8'")or $this->error('Ошибка: Неудалось включить UTF8.');
+		
+		$this->query("use $vuz_dbname")or
+			$this->error('Ошибка: Не возможно открыть базу данных: '.$vuz_dbname);
+		$this->query("SET NAMES 'utf8'")or
+			$this->error('Ошибка: Неудалось включить UTF8.');
 	}
-    # выполнение запроса и возврат результата
+	# выполнение запроса и возврат результата
 	function query($sql,$checkerr=TRUE)
 	{
 		$this->sql=$sql;
-		$result=mysql_query($sql,$this->connect);
+		$result=$this->connect->query($sql);
 		if (!$result&&$checkerr) $this->error('query: запрос содержит ошибку.');
 		return $result;
 	}
@@ -44,53 +54,41 @@ class TDataBase
 	function result($result,$row)
 	{
 		if (!$result) $this->error('result: не верные исходные данные.');
-		return mysql_result($result,$row);
-	}
-	# Количество колонок в результате запроса
-	function fieldcount($result)
-	{
-		if (!$result) $this->error('fieldcount: не верные исходные данные.');
-		return mysql_num_fields($result);
+		return $result->fetchColumn();
 	}
 	# Количество записей в результате запроса
 	function rowcount($result)
 	{
 		if (!$result) $this->error('rowcount: не верные исходные данные.');
-		return mysql_num_rows($result);
+		return $result->rowcount();
 	}
 	# Получение массива записи
 	function getrow($result)
 	{
 		if (!$result) $this->error('getrow: не верные исходные данные.');
-		return mysql_fetch_row($result);
-	}
-	# Получение инени поля
-	function getfieldname($result,$fieldnum)
-	{
-		if (!$result) $this->error('getfields: не верные исходные данные.');
-		return mysql_field_name($result,$fieldnum);
+		return $result->fetchColumn();
 	}
 	# Получение массива таблицы
 	function gettable($result)
 	{
 		if (!$result) $this->error('gettable: не верные исходные данные.');
-		return mysql_fetch_array($result);
+		return $result->fetchAll();
 	}
 	# экран для одинарных кавычек
 	function escstr($str)
 	{
-		return mysql_real_escape_string($str);
+		return $str;
 	}
 	# получение записи с ключами - названиями полей
 	function getassocrow($result)
 	{
-		if (!$result) $this->error('getassocrow: не верные исходные данные.');
-    	return mysql_fetch_assoc($result);
+    	return $result->fetch();
     }
-    function error($msg)
+	function error($msg)
     {
     	if ($this->debug)
     	{
+			$err=$this->connect->errorInfo();
 	    	die("<html>
 					<head>
 						<title>Запрос содержит ошибку</title>
@@ -102,8 +100,9 @@ class TDataBase
 					</head>
 					<body>
 						<div id='msgerror'>
-							Номер ошибки MySQL: ".mysql_errno($this->connect)."<br/>
-							MySQL вернул ошибку: ".mysql_error($this->connect)."
+							Номер ошибки MySQL: ".$this->connect->errorCode()."<br/>
+							MySQL вернул ошибку: ".$err[1]."<br/>
+							".$err[2]."
 						</div>
 						Текст запроса:
 						<div id='msgerror'>
@@ -113,7 +112,8 @@ class TDataBase
 				</html>");
         }
         else
-        {	    	die("<html>
+        {
+	    	die("<html>
 					<head>
 					<title>Запрос содержит ошибку</title>
 					<style type=\"text/css\">
@@ -123,10 +123,11 @@ class TDataBase
 					</head>
 					<body>
 						<div id='msgerror'>
-							Номер ошибки MySQL: ".mysql_errno($this->connect)."
+							Номер ошибки MySQL: ".$this->connect->errorCode()."
 						</div>
 					</body>
-				</html>");        }
+				</html>");
+        }
     }
 
 	# Генерация и выполнение запроса на добавление данных
@@ -158,7 +159,8 @@ class TDataBase
 			$sql.=$key.'='.$value.', ';
 		}
 		$sql=substr($sql,0,strlen($sql)-2)." WHERE key_$table=".$fields["key_$table"];
-    	if ($this->debug){echo $sql;}		return $this->query($sql,FALSE);
+    	if ($this->debug){echo $sql;}
+		return $this->query($sql,FALSE);
 	}
 }
 ?>

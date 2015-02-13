@@ -50,7 +50,8 @@ function checkprivs($login,$privs,$properties)
 }
 
 function makemainmenu()
-{	global $tpl,$db,$id,$page,$login,$privs,$pages;
+{
+	global $tpl,$db,$id,$page,$login,$privs,$pages;
 
 	$tpl->load(array(
 		"mainmenu"=>"mainmenu.tpl",
@@ -98,7 +99,8 @@ function makemenu()
 	if ($result)
 	{
 		if ($db->rowcount($result)!=0)
-		{			$tpl->load(array(
+		{
+			$tpl->load(array(
 				'menu'=>'menu.tpl',
 				'menuitem'=>'menuitem.tpl',
 				'menuitemsel'=>'menuitemsel.tpl',
@@ -141,11 +143,17 @@ function makemenu()
 }
 
 function checkmode()
-{	global $pages,$page,$mode;
+{
+	global $pages,$page,$mode;
 	if ((!file_exists('./config.php'))||(file_exists('./setup')))
-    {    	$mode=FALSE;    }
+    {
+    	$mode=FALSE;
+    }
     else
-    {    	$mode=TRUE;    }}
+    {
+    	$mode=TRUE;
+    }
+}
 
 function getpagename()
 {
@@ -170,12 +178,16 @@ function getpagename()
 					if ($page=='404')
 						$page=$pagename;
 					if (isset($properties['index']))
-						$page=$pagename;				}
-			}		}
-    }}
+						$page=$pagename;
+				}
+			}
+		}
+    }
+}
 
 function setmessages($messages,$var)
-{	global $tpl,$gourl;
+{
+	global $tpl,$gourl;
 	foreach($messages as $message)
 	{
 		$tpl->setvar(strtoupper($var).'TEXT',$message);
@@ -194,7 +206,7 @@ function checkpage($properties)
 	$openpage=FALSE;
 	if (checkprivs($login,$privs,$properties))
 	{
-		if ($mode xor isset($properties['setuponly']))
+		if ($mode || isset($properties['setuponly']))
 		{
 			$openpage=TRUE;
 		}
@@ -238,7 +250,9 @@ function loadpages()
 				if ($mode)
 				{
 					if (!isset($properties['notmenu']))
-					{						makemenu();					}
+					{
+						makemenu();
+					}
 				}
 				if (!isset($properties['notmain']))
 				{
