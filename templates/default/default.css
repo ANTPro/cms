@@ -1,0 +1,54 @@
+/*
+#F0F2F0 - фон
+#000000 - шрифт на фоне
+#00000F - ссылка
+#00AF0F - ссылка над которой мышь
+#00FF00 - фон меню
+#000000 - рамка
+#F0FFF0 - фон основного текста
+#A0FFA0 - фон заголовка основного текста
+#AFAFAF - фон тени
+#F0F0F0 - фон тени
+#F0FFF0 - фон выбранного элемента
+#F0FFF0
+*/
+.MSGERROR {
+border: 1px solid #000000;
+background-color: #A0FFA0;
+color:#FF0000;
+padding: 8px 11px;
+font-size: 11px; font-weight:bold;
+margin: 0px 10px 10px 10px;
+text-align:left;
+}
+.MSGINFO {
+border: 1px solid #000000;
+background-color: #A0FFA0;
+color:#000000;
+padding: 8px 11px;
+font-size: 11px; font-weight:bold;
+margin: 0px 10px 10px 10px;
+text-align:left;
+}
+BODY,.MENU{font:8pt Verdana,Arial;text-align:center}
+BODY{background:#F0F2F0;color:#000000}
+A{color:#00000F;text-decoration:underline}
+A:hover{color:#00AF0F;text-decoration:none}
+P{text-indent: 8px;text-align:justify}
+H1{font:25pt Verdana,Arial;font-weight:bold}
+.MENU {background:#00FF00;font-weight:bold;border:1px solid #000000}
+.MENU TD{border:1px solid #000000}
+.MENU A,.MENU A:hover{text-decoration:none;display:block}
+.MENU A{color:#00000F}
+.MENU A:hover{color:#00AF0F}
+.CONTENT,.CONTENT TH,.CONTENT TD{border:1px solid #000000}
+.CONTENT {font:8pt Verdana,Arial;background:#F0FFF0}
+.CONTENT TH{background:#A0FFA0}
+.TEXT ,.TEXT TH, .TEXT TD{border:0px solid #000000}
+.IMAGE {border:1px solid #000000}
+UL, LI{font:10pt Verdana,Arial}
+.TEXT {font:8pt Verdana,Arial;background:#F0FFF0}
+.TEXT TH{background:#A0FFA0}
+.SHADE{background:#AFAFAF}
+.LIGHT{background:#F0F0F0}
+.SEL    {background:#A0FFA0;color:#000000}

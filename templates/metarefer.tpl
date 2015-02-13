@@ -1,0 +1,1 @@
+﻿<meta http-equiv="refresh" content="[META_TIME];url=[META_URL]" />

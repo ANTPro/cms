@@ -1,0 +1,40 @@
+.MSGERROR {
+border: 1px solid #000000;
+background-color: #CACACA;
+color:#FF0000;
+padding: 8px 11px;
+font-size: 11px; font-weight:bold;
+margin: 0px 10px 10px 10px;
+text-align:left;
+}
+.MSGINFO {
+border: 1px solid #000000;
+background-color: #CACACA;
+color:#000000;
+padding: 8px 11px;
+font-size: 11px; font-weight:bold;
+margin: 0px 10px 10px 10px;
+text-align:left;
+}
+BODY,.MENU{font:8pt Verdana,Arial;text-align:center}
+BODY{background:#F2F2F2;color:#000000}
+A{color:#0F0F0F;text-decoration:underline}
+A:hover{color:#AFAFAF;text-decoration:none}
+P{text-indent: 8px;text-align:justify}
+H1{font:25pt Verdana,Arial;font-weight:bold}
+.MENU {background:#DFDFDF;font-weight:bold;border:1px solid #000000}
+.MENU TD{border:0px solid #000000}
+.MENU A,.MENU A:hover{text-decoration:none;display:block}
+.MENU A{color:#0F0F0F}
+.MENU A:hover{color:#AFAFAF}
+.CONTENT TH,.CONTENT TD{border:0px solid #000000}
+.CONTENT {font:8pt Verdana,Arial;background:#EFEFEF;border:1px solid #000000}
+.CONTENT TH{background:#CACACA}
+.TEXT ,.TEXT TH, .TEXT TD{border:0px solid #000000}
+.IMAGE {border:1px solid #000000}
+UL, LI{font:10pt Verdana,Arial}
+.TEXT {font:8pt Verdana,Arial;background:#EFEFEF}
+.TEXT TH{background:#EFEFEF}
+.SHADE{background:#AFAFAF}
+.LIGHT{background:#F0F0F0}
+.SEL    {background:#FFFFFF;color:#000000}
